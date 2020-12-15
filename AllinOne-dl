@@ -1,0 +1,201 @@
+#!/bin/bash
+
+url=$1
+
+function get_path () {
+	local paths=( \
+		"Downloads/" \
+		"Movies/" \
+		"Pictures/" \
+		"Music/" \
+		"storage/downloads/" \
+		"storage/music/" \
+		"storage/movies/" \
+		"storage/pictures/" \
+		"storage/external-1/")
+	local validated_paths=""
+
+	for i in "${paths[@]}"
+	do
+		if [ -d "$i" ]; then
+			validated_paths+="$i,"
+		fi
+	done
+
+
+	local chosen_path=$(termux-dialog radio \
+		-v "$validated_paths" \
+		-t "Choose download path:" \
+		| grep text \
+		| cut -d "\"" -f4)
+	path="$HOME/$chosen_path"
+}
+
+get_path
+
+options=""
+case "$url" in
+	*youtu.be*|youtube.com*)
+		options+="stream music from video/playlist,"
+		options+="download video/playlist (720p),"
+		options+="download video/playlist (480p),"
+		options+="download video/playlist (just best quality),"
+		options+="download audio (mp3),"
+		options+="download audio (m4a),"
+		options+="download audio (flac),"
+		options+="download audio (opus),"
+		options+="download track using spodl,"
+		;;
+	*instagram.com*|*pinterest.com*|*imgur.com*)
+		options+="download image,"
+		;;
+	*open.spotify.com/track/*)
+		options+="download Spotify track,"
+		;;
+	*open.spotify.com/*/playlist/*)
+		options+="download Spotify playlist,"
+		;;
+	*open.spotify.com/album/*)
+		options+="download Spotify album,"
+		;;
+	*github.com*)
+		options+="clone github repo,"
+		;;
+	*)
+		options+="stream music from video/playlist,"
+		options+="download torrent or regular file,"
+		options+="download image,"
+		options+="download audio (mp3),"
+		options+="download audio (m4a),"
+		options+="download audio (flac),"
+		options+="download audio (opus),"
+		options+="download video/playlist (720p),"
+		options+="download video/playlist (480p),"
+		options+="download video/playlist (just best quality),"
+		;;
+esac
+options+="nothing"
+
+
+
+# options+="animevost anime,"
+# add link to bookmarks
+# add to orgmode bkmrks
+# 
+
+method=$(termux-dialog radio \
+	-v "$options" \
+	-t "Choose download method:" \
+	| grep text \
+	| cut -d "\"" -f4)
+
+case "$method" in
+	"download video/playlist (720p)")
+		youtube-dlc --yes-playlist \
+			-cif "bestvideo[height<=720]+bestaudio/best[height<=720]" \
+            -o "$path%(title)s.%(ext)s" \
+			"$url"
+		;;
+	"download video/playlist (480p)")
+		youtube-dlc --yes-playlist \
+			-cif "bestvideo[height<=480]+bestaudio/best[height<=480]" \
+            -o "$path%(title)s.%(ext)s" \
+			"$url"
+		;;
+	"download video/playlist (just best quality)")
+		youtube-dlc --yes-playlist \
+			-cif "bestvideo+bestaudio/best" \
+            -o "$path%(title)s.%(ext)s" \
+			"$url"
+		;;
+	"download audio (mp3)")
+		youtube-dlc \
+			-x --audio-format mp3 --audio-quality 0 \
+			--embed-thumbnail \
+            -o "$path%(title)s.%(ext)s" \
+			"$url"
+		;;
+	"download audio (m4a)")
+		youtube-dlc	\
+			-x --audio-format m4a --audio-quality 0 \
+			--embed-thumbnail \
+            -o "$path%(title)s.%(ext)s" \
+			"$url"
+		;;
+	"download audio (flac)")
+		youtube-dlc	\
+			-x --audio-format flac --audio-quality 0 \
+			--embed-thumbnail \
+            -o "$path%(title)s.%(ext)s" \
+			"$url"
+		;;
+	"download audio (opus)")
+		youtube-dlc	\
+			-x --audio-format opus --audio-quality 0 \
+			--embed-thumbnail \
+            -o "$path%(title)s.%(ext)s" \
+			"$url"
+		;;
+	"download image")
+	  gallery-dl -d "$path" "$url"
+	  ;;
+	"stream music from video/playlist")
+		mpv \
+			--no-video \
+			--load-unsafe-playlists \
+			"$url"
+		;;
+	"animevost anime")
+		python3 animevost-dl.py "$url" "$path"
+		;;
+	"clone github repo")
+		repo_name=$(echo "$url" | cut -d'/' -f5)
+		git clone "$url" "$path$repo_name"
+		;;
+	"download torrent or regular file")
+		aria2c -x2 -c "$url" --dir "$path"
+		;;
+	"download Spotify track")
+		spotdl \
+			--song "$url" \
+			--output-file "$path{artist} - {track-name}.{output-ext}" \
+			-q best \
+			--output-ext mp3
+		;;
+	"download Spotify playlist")
+		[ -f  "$HOME/.cache/.spdl_cache" ] \
+			&& rm "$HOME/.cache/.spdl_cache"
+		spotdl \
+			--playlist "$url" \
+			--write-to  "$HOME/.cache/.spdl_cache"  \
+		&& spotdl \
+			--list "$HOME/.cache/.spdl_cache" \
+			--output-file "$path{artist} - {track-name}.{output-ext}" \
+			-q best \
+			--output-ext mp3 \
+		&& rm -f "$HOME/.cache/.spdl_cache"
+		;;
+	"download Spotify album")
+		[ -f  "$HOME/.cache/.spdl_cache"  ] \
+			&& rm "$HOME/.cache/.spdl_cache"
+		spotdl \
+			--album "$url" \
+			--write-to  "$HOME/.cache/.spdl_cache" \
+		&& spotdl \
+			--list "$HOME/.cache/.spdl_cache" \
+			--output-file "$path{artist} - {track-name}.{output-ext}" \
+			-q best \
+			--output-ext mp3 \
+		&& rm -f "$HOME/.cache/.spotdl_cache"
+		;;
+	"download track using spodl")
+		spotdl \
+			-s "$url"
+			--output-file "$path{artist} - {track-name}.{output-ext}" \
+			-q best \
+			--output-ext mp3 \
+		;;
+	"nothing")
+		exit 0
+		;;
+esac
