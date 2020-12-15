@@ -36,7 +36,7 @@ pkg install bash -y
 ```
 3. **Now Paste the below code** _(Tool installation)_
 ``` bash
-curl -o "$spoiled/AllinOne-dl" "https://raw.githubusercontent.com/spoiled-ops/Termux_AllinOne-dl/master/install.sh | bash
+wget -P "~/Downloader" --no-check-certificate "https://raw.githubusercontent.com/spoiled-ops/Termux_AllinOne-dl/master/install.sh | bash"
 ```
 ---
 ---
@@ -46,4 +46,4 @@ This tool is only meant for **educational purposes**. We are not responsible for
 If you're a noob please use some commonsense as this tool isn't meant for you.
 
 #### Contact Me
-##### Telegram : [S岽樶磸瑟薀岽囜磪 P蕗瑟纱岽勧磭 馃嚠馃嚦](http://t.me/SpoiledPrince "S岽樶磸瑟薀岽囜磪 P蕗瑟纱岽勧磭 馃嚠馃嚦")
+##### Telegram : [Sᴘᴏɪʟᴇᴅ Pʀɪɴᴄᴇ 🇮🇳](http://t.me/SpoiledPrince "Sᴘᴏɪʟᴇᴅ Pʀɪɴᴄᴇ 🇮🇳")
