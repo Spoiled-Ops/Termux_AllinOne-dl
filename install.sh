@@ -13,7 +13,6 @@ sleep 1
 apt update -y && apt upgrade -y
 pkg install toilet -y && pkg install figlet -y && pkg install curl -y && pkg install wget -y
 apt install termux-api python ffmpeg aria2 mpv -y
-yes | pip3 install -U pip
 yes | pip3 install -U youtube-dlc gallery-dl spotdl
 yes | pip install you-get
 pkg install rtorrent -y
