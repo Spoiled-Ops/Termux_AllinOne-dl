@@ -13,7 +13,9 @@ sleep 1
 apt update -y && apt upgrade -y
 pkg install toilet -y && pkg install figlet -y && pkg install curl -y && pkg install wget -y
 apt install termux-api python ffmpeg aria2 mpv -y
-yes | pip3 install -U youtube-dlc gallery-dl spotdl
+yes | pip3 install youtube-dlc 
+yes | pip3 install gallery-dl
+yes | pip insatll spotdl
 yes | pip install you-get
 pkg install rtorrent -y
 clear
@@ -24,12 +26,12 @@ sleep 2
 echo -e ""
 echo -e "Now setting up storage and download paths."
 # Path Chosen
-spoiled="$HOME/Downloader"
+spoiled="$HOME/bin"
 
 [ -d "$spoiled" ] || mkdir "$spoiled"
-[ -f "$spoiled/AllinOne-dl" ] && rm -f "$spoiled/AllinOne-dl"
+[ -f "$spoiled/termux-url-opener" ] && rm -f "$spoiled/termux-url-0opener"
 
-wget -P "$spoiled" --no-check-certificate "https://raw.githubusercontent.com/spoiled-ops/Termux_AllinOne-dl/master/AllinOne-dl" 
-chmod +x "$spoiled/AllinOne-dl"
-termux-fix-shebang "$spoiled/AllinOne-dl"
+wget -P "$spoiled" --no-check-certificate "https://raw.githubusercontent.com/spoiled-ops/Termux_AllinOne-dl/master/termux-url-opener" 
+chmod +x "$spoiled/termux-url-opener"
+termux-fix-shebang "$spoiled/termux-url-opener"
 termux-setup-storage
