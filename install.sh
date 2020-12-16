@@ -15,7 +15,7 @@ pkg install toilet -y && pkg install figlet -y && pkg install curl -y && pkg ins
 apt install termux-api python ffmpeg aria2 mpv -y
 yes | pip3 install youtube-dlc 
 yes | pip3 install gallery-dl
-yes | pip insatll spotdl
+yes | pip install spotdl
 yes | pip install you-get
 pkg install rtorrent -y
 clear
