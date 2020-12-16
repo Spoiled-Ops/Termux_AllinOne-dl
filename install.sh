@@ -29,7 +29,7 @@ spoiled="$HOME/Downloader"
 [ -d "$spoiled" ] || mkdir "$spoiled"
 [ -f "$spoiled/AllinOne-dl" ] && rm -f "$spoiled/AllinOne-dl"
 
-wget -P "~/Downloader" --no-check-certificate "https://raw.githubusercontent.com/spoiled-ops/Termux_AllinOne-dl/master/AllinOne-dl" 
-chmod +x "~/Downloader/AllinOne-dl"
+wget -P "$spoiled" --no-check-certificate "https://raw.githubusercontent.com/spoiled-ops/Termux_AllinOne-dl/master/AllinOne-dl" 
+chmod +x "$spoiled/AllinOne-dl"
 termux-fix-shebang "$spoiled/AllinOne-dl"
 termux-setup-storage
