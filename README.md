@@ -36,7 +36,12 @@ pkg install bash -y
 ```
 3. **Now Paste the below code** _(Tool installation)_
 ``` bash
-wget -P "~/Downloader" --no-check-certificate "https://raw.githubusercontent.com/spoiled-ops/Termux_AllinOne-dl/master/install.sh | bash"
+git clone https://github.com/spoiled-ops/Termux_AllinOne-dl
+chmod +x Termux_AllinOne-dl
+cd Termux_AllinOne-dl
+ls
+chmod +x *
+./install.sh 
 ```
 ---
 ---
